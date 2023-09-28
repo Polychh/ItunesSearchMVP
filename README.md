@@ -1,2 +1,2 @@
 # ItunesSearchMVP
-Search and play a song by keyword
+The app ItunesSearchMVP displays a list of songs by keyword with the ability to play the selected song
