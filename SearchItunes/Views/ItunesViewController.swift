@@ -92,12 +92,7 @@ extension ItunesViewController: UITableViewDelegate, UITableViewDataSource{
         let songInfo = presenterItunes.songs?[indexPath.row]
         cell.artistNameLabel.text = songInfo?.artistName
         cell.trackNameLabel.text = songInfo?.trackCensoredName
-        
-        presenterItunes.downloadImage(urlImage: songInfo?.artworkUrl60 ?? Constant.defaultURL) { (data) in
-            DispatchQueue.main.async {
-                cell.itunesImageView.image = UIImage(data: data)
-            }
-        }
+        cell.itunesImageView.image = UIImage(data: presenterItunes.dataImage[indexPath.row])
         return cell
     }
     
@@ -122,8 +117,11 @@ extension ItunesViewController: ItunesViewProtocol{
     }
     
     func success() {
-        self.tableView.reloadData()
+        DispatchQueue.main.async() {
+            self.tableView.reloadData()
+        }
     }
+    
     
     func failure(error: ItunesError) {
         presentItunesAleretOnMainThread(title: "Error", message: error.rawValue, buttonTitle: "Ok")

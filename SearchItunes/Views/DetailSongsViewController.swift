@@ -63,6 +63,8 @@ class DetailSongsViewController: UIViewController {
         return button
     }()
     
+    let activityIndicatorDetail = ItunesActivityIndicator(frame: .zero)
+    
     var presenterDetails: DatailSongVCPresenterProtocol!
     
     override func viewDidLoad() {
@@ -93,6 +95,8 @@ extension DetailSongsViewController{
         view.addSubview(detailItunesImageView)
         view.addSubview(stackViewV)
         view.addSubview(detailButtonPlay)
+        activityIndicatorDetail.center = view.center
+        view.addSubview(activityIndicatorDetail)
         
         let padding: CGFloat = 12
         
@@ -117,14 +121,28 @@ extension DetailSongsViewController{
 }
 //MARK: - ListenPresenter vc is delegate for presenter
 extension DetailSongsViewController: DetailSongsViewProtocol{
+
     func startSetInfoSongs(infoSongs: Items?) {
         detailTrackNameLabel.text = infoSongs?.trackCensoredName
         detailArtistNameLabel.text = infoSongs?.artistName
-        presenterDetails.downloadImageDetailVC(urlImage: infoSongs?.artworkUrl60 ?? Constant.defaultURL) { (data) in
-            DispatchQueue.main.async {
-                self.detailItunesImageView.image = UIImage(data: data)
-            }
+        presenterDetails.downloadImageDetailVC(urlImage: infoSongs?.artworkUrl60 ?? Constant.defaultURL, urlSong: infoSongs!.previewUrl)
+    }
+    
+    func successDownload() {
+        DispatchQueue.main.async{
+            self.detailItunesImageView.image = UIImage(data: self.presenterDetails.dataFromURLImage)
         }
-        presenterDetails.downloadSongsDetailVC(urlSong: infoSongs!.previewUrl)
+    }
+    
+    func startLoadinView() {
+        DispatchQueue.main.async {
+            self.activityIndicatorDetail.startAnimating()
+        }
+    }
+    
+    func dissmisLoadingView() {
+        DispatchQueue.main.async() {
+            self.activityIndicatorDetail.stopAnimating()
+        }
     }
 }
