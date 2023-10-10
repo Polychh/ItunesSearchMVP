@@ -14,6 +14,7 @@ The ItunesSearchMVP is build using: UIKit, Foundation, AVFoundation.
 ### What skills I learned and applied:
 - Build an App programmatically.
 - Practice with MVP.
+- Practice Bulder, AbstractFactory, Coordinators patterns.
 - Applied Auto Layout and constraints.
 - Practice with UIKit, Foundation, AVFoundation.
 - Applied Dependency Injection.
