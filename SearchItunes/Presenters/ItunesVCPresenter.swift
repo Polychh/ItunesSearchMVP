@@ -16,22 +16,27 @@ protocol ItunesViewProtocol: AnyObject{
 }
 
 protocol ItunesViewPresenterProtocol: AnyObject {
-    init(networkService: Manager)
+    init(networkService: Manager, view: ItunesViewProtocol?, delegate: ItunesSearchPresenterDeleegate)
     func getSongs(songName:String)
     func cleanTableView()
     func setDismissLoadingView()
+    func tapOnTheSong(infoSong: Items?)
     var songs: [Items]? {get set}
     var dataImage: [Data] {get set}
 }
 
 class ItunesVCPresenter: ItunesViewPresenterProtocol {
+    
     var networService: Manager
     weak var viewItunes: ItunesViewProtocol?
     var songs: [Items]?
     var dataImage: [Data] = []
+    var delegate: ItunesSearchPresenterDeleegate
         
-    required init(networkService: Manager) {
+    required init(networkService: Manager, view: ItunesViewProtocol?, delegate: ItunesSearchPresenterDeleegate  ) {
         self.networService = networkService
+        self.viewItunes = view
+        self.delegate = delegate
     }
     
     func getSongs(songName: String) {
@@ -55,17 +60,15 @@ class ItunesVCPresenter: ItunesViewPresenterProtocol {
                             self.networService.downloadImage(from: song.artworkUrl60 ?? Constant.defaultURL) { (data) in
                                 //sleep(1) // to see how work dispatch group
                                 print("Thread3 \(Thread.current)")
-                                if let data = data{
-                                    self.dataImage.append(data)
-                                    group.leave()
-                                }
+                                self.dataImage.append(data)
+                                group.leave()
                             }
                         }
-                    }
-                    group.notify(queue: .main){
-                        print("Thread4 \(Thread.current)")
-                        self.viewItunes?.dissmisLoadingView()
-                        self.viewItunes?.success()
+                        group.notify(queue: .main){
+                            print("Thread4 \(Thread.current)")
+                            self.viewItunes?.dissmisLoadingView()
+                            self.viewItunes?.success()
+                        }
                     }
                 }
             case .failure(let error):
@@ -75,12 +78,17 @@ class ItunesVCPresenter: ItunesViewPresenterProtocol {
         }
     }
     
+    
     func setDismissLoadingView() {
         viewItunes?.dissmisLoadingView()
     }
     
     func cleanTableView() {
         songs = []
+    }
+    
+    func tapOnTheSong(infoSong: Items?) {
+        delegate.didSelectSong(infoSong: infoSong)
     }
 }
 

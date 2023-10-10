@@ -16,7 +16,7 @@ protocol DetailSongsViewProtocol: AnyObject{
 }
 
 protocol DatailSongVCPresenterProtocol: AnyObject{
-    init(networkService: Manager, songInfo: Items? )
+    init(networkService: Manager,view: DetailSongsViewProtocol?, songInfo: Items?)
     func setInfoSongs()
     func downloadImageDetailVC(urlImage: String, urlSong: String)
     func pressedPlayButton()
@@ -35,8 +35,9 @@ class DatailSongsVCPresenter: DatailSongVCPresenterProtocol{
     var dataFromURLImage: Data = Data()
     var dataFromURLMusic: Data = Data()
     
-    required init(networkService: Manager, songInfo: Items?) {
+    required init(networkService: Manager, view: DetailSongsViewProtocol?, songInfo: Items?) {
         self.networkService = networkService
+        self.detailView = view
         self.infoSong = songInfo
     }
     
@@ -46,18 +47,15 @@ class DatailSongsVCPresenter: DatailSongVCPresenterProtocol{
     
     func downloadImageDetailVC(urlImage: String, urlSong: String) {
         let group = DispatchGroup()
-    
         networkService.downloadImage(from: urlImage) { (data) in
             self.detailView?.startLoadinView()
             print("Thread5 \(Thread.current)")
-            guard let data = data else { return }
             self.dataFromURLImage = data
             self.detailView?.successDownload()
             group.enter()
             self.networkService.downloadImage(from: urlSong) { (data) in
                 print("Thread6 \(Thread.current)")
                 //sleep(4) // to see how work dispatch group
-                guard let data = data else { return }
                 self.dataFromURLMusic = data
                 group.leave()
             }

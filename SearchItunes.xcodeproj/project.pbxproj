@@ -7,9 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CE75D6E32ACDD6AF00CFB21D /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE75D6E22ACDD6AF00CFB21D /* AppCoordinator.swift */; };
+		CE8212E82ACD7B5000F85948 /* ItunesSearchCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8212E72ACD7B5000F85948 /* ItunesSearchCoordinator.swift */; };
 		CE82A34D2AC34E09002AF16C /* DetailSongsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE82A34C2AC34E09002AF16C /* DetailSongsViewController.swift */; };
 		CE82A3502AC35E98002AF16C /* DetailSongsVCPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE82A34F2AC35E98002AF16C /* DetailSongsVCPresenter.swift */; };
 		CEA18C0E2AC47E1D00BDBDF3 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA18C0D2AC47E1D00BDBDF3 /* Constant.swift */; };
+		CEBB27832ACDD192002AC41B /* CoordinatorFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEBB27822ACDD192002AC41B /* CoordinatorFactory.swift */; };
 		CED202D52AC318C800ABB5E4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED202D42AC318C800ABB5E4 /* AppDelegate.swift */; };
 		CED202D72AC318C800ABB5E4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED202D62AC318C800ABB5E4 /* SceneDelegate.swift */; };
 		CED202D92AC318C800ABB5E4 /* ItunesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED202D82AC318C800ABB5E4 /* ItunesViewController.swift */; };
@@ -24,14 +27,17 @@
 		CED203082AC31ED100ABB5E4 /* ItunesAlertVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED203072AC31ED100ABB5E4 /* ItunesAlertVC.swift */; };
 		CED2030C2AC31EFB00ABB5E4 /* ItunesAlertContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED2030B2AC31EFB00ABB5E4 /* ItunesAlertContainerView.swift */; };
 		CED203142AC31F7F00ABB5E4 /* TableSongsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED203132AC31F7F00ABB5E4 /* TableSongsCell.swift */; };
-		CED203192AC3238D00ABB5E4 /* ViewBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED203182AC3238D00ABB5E4 /* ViewBuilder.swift */; };
+		CED203192AC3238D00ABB5E4 /* ViewControlerBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED203182AC3238D00ABB5E4 /* ViewControlerBuilder.swift */; };
 		CEE31ABC2AC5762600A23C21 /* ItunesActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE31ABB2AC5762600A23C21 /* ItunesActivityIndicator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		CE75D6E22ACDD6AF00CFB21D /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
+		CE8212E72ACD7B5000F85948 /* ItunesSearchCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItunesSearchCoordinator.swift; sourceTree = "<group>"; };
 		CE82A34C2AC34E09002AF16C /* DetailSongsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailSongsViewController.swift; sourceTree = "<group>"; };
 		CE82A34F2AC35E98002AF16C /* DetailSongsVCPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailSongsVCPresenter.swift; sourceTree = "<group>"; };
 		CEA18C0D2AC47E1D00BDBDF3 /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
+		CEBB27822ACDD192002AC41B /* CoordinatorFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatorFactory.swift; sourceTree = "<group>"; };
 		CED202D12AC318C800ABB5E4 /* SearchItunes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SearchItunes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CED202D42AC318C800ABB5E4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CED202D62AC318C800ABB5E4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -48,7 +54,7 @@
 		CED203072AC31ED100ABB5E4 /* ItunesAlertVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItunesAlertVC.swift; sourceTree = "<group>"; };
 		CED2030B2AC31EFB00ABB5E4 /* ItunesAlertContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItunesAlertContainerView.swift; sourceTree = "<group>"; };
 		CED203132AC31F7F00ABB5E4 /* TableSongsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableSongsCell.swift; sourceTree = "<group>"; };
-		CED203182AC3238D00ABB5E4 /* ViewBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewBuilder.swift; sourceTree = "<group>"; };
+		CED203182AC3238D00ABB5E4 /* ViewControlerBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControlerBuilder.swift; sourceTree = "<group>"; };
 		CEE31ABB2AC5762600A23C21 /* ItunesActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItunesActivityIndicator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -63,6 +69,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CE8212E62ACD7B3800F85948 /* Coordinators */ = {
+			isa = PBXGroup;
+			children = (
+				CE8212E72ACD7B5000F85948 /* ItunesSearchCoordinator.swift */,
+				CE75D6E22ACDD6AF00CFB21D /* AppCoordinator.swift */,
+			);
+			path = Coordinators;
+			sourceTree = "<group>";
+		};
+		CE84CD842AD486BF007E2765 /* Builders */ = {
+			isa = PBXGroup;
+			children = (
+				CED203182AC3238D00ABB5E4 /* ViewControlerBuilder.swift */,
+			);
+			path = Builders;
+			sourceTree = "<group>";
+		};
 		CED202C82AC318C800ABB5E4 = {
 			isa = PBXGroup;
 			children = (
@@ -82,7 +105,9 @@
 		CED202D32AC318C800ABB5E4 /* SearchItunes */ = {
 			isa = PBXGroup;
 			children = (
-				CED203172AC3237C00ABB5E4 /* Assambly */,
+				CE84CD842AD486BF007E2765 /* Builders */,
+				CE8212E62ACD7B3800F85948 /* Coordinators */,
+				CED203172AC3237C00ABB5E4 /* Factories */,
 				CED202F92AC31BF200ABB5E4 /* Presenters */,
 				CED202F52AC31A4800ABB5E4 /* Helpers */,
 				CED202F12AC319FE00ABB5E4 /* Services */,
@@ -170,12 +195,12 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
-		CED203172AC3237C00ABB5E4 /* Assambly */ = {
+		CED203172AC3237C00ABB5E4 /* Factories */ = {
 			isa = PBXGroup;
 			children = (
-				CED203182AC3238D00ABB5E4 /* ViewBuilder.swift */,
+				CEBB27822ACDD192002AC41B /* CoordinatorFactory.swift */,
 			);
-			path = Assambly;
+			path = Factories;
 			sourceTree = "<group>";
 		};
 		CEE31AB52AC574EE00A23C21 /* UIActivityIndicators */ = {
@@ -259,12 +284,15 @@
 				CE82A3502AC35E98002AF16C /* DetailSongsVCPresenter.swift in Sources */,
 				CED202F32AC31A1100ABB5E4 /* NetworkService.swift in Sources */,
 				CED203142AC31F7F00ABB5E4 /* TableSongsCell.swift in Sources */,
+				CE8212E82ACD7B5000F85948 /* ItunesSearchCoordinator.swift in Sources */,
 				CEA18C0E2AC47E1D00BDBDF3 /* Constant.swift in Sources */,
+				CEBB27832ACDD192002AC41B /* CoordinatorFactory.swift in Sources */,
 				CED203082AC31ED100ABB5E4 /* ItunesAlertVC.swift in Sources */,
-				CED203192AC3238D00ABB5E4 /* ViewBuilder.swift in Sources */,
+				CED203192AC3238D00ABB5E4 /* ViewControlerBuilder.swift in Sources */,
 				CED202FB2AC31C0E00ABB5E4 /* ItunesVCPresenter.swift in Sources */,
 				CED202D92AC318C800ABB5E4 /* ItunesViewController.swift in Sources */,
 				CED202F72AC31A6900ABB5E4 /* ItunesError.swift in Sources */,
+				CE75D6E32ACDD6AF00CFB21D /* AppCoordinator.swift in Sources */,
 				CED202D52AC318C800ABB5E4 /* AppDelegate.swift in Sources */,
 				CED202D72AC318C800ABB5E4 /* SceneDelegate.swift in Sources */,
 				CED2030C2AC31EFB00ABB5E4 /* ItunesAlertContainerView.swift in Sources */,

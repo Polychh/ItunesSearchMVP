@@ -9,7 +9,7 @@ import Foundation
 
 protocol Manager{
     func getSongsInfo( for nameSong: String, completed: @escaping (Result<[Items], ItunesError>) -> Void)
-    func downloadImage(from urlString: String, completed: @escaping(Data?) -> Void)
+    func downloadImage(from urlString: String, completed: @escaping(Data) -> Void)
 }
 
 class NetworkManager: Manager{
@@ -54,10 +54,9 @@ class NetworkManager: Manager{
         task.resume()
     }
     
-    func downloadImage(from urlString: String, completed: @escaping(Data?) -> Void){
+    func downloadImage(from urlString: String, completed: @escaping(Data) -> Void){
         guard let url = URL(string: urlString) else {
             print("Error download")
-            completed(nil) 
             return
         }
         
@@ -75,6 +74,7 @@ class NetworkManager: Manager{
                 return
             }
             completed(data)
+           
         }
         task.resume()
     }
