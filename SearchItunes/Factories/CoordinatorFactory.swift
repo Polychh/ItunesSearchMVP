@@ -8,13 +8,13 @@
 import UIKit
 
 protocol CoordinatorBuilderProtocol{
-    func createItunnesSearchCoordinator(navigationController: UINavigationController?, viewFactoryBuilder: BuilderProtocol) -> Coordinator
+    func createItunnesSearchCoordinator(navigationController: UINavigationController?, viewBuilder: BuilderProtocol) -> Coordinator
     func createAppCoordinator(navigationController: UINavigationController) -> Coordinator
 }
 
 class CoordinatorFactory: CoordinatorBuilderProtocol {
-    func createItunnesSearchCoordinator(navigationController: UINavigationController?, viewFactoryBuilder: BuilderProtocol) -> Coordinator {
-        ItunesSearchCoordinator(navigationController: navigationController, viewFactoryBuilder: viewFactoryBuilder)
+    func createItunnesSearchCoordinator(navigationController: UINavigationController?, viewBuilder: BuilderProtocol) -> Coordinator {
+        ItunesSearchCoordinator(navigationController: navigationController, viewBuilder: viewBuilder)
     }
     
     func createAppCoordinator(navigationController: UINavigationController) -> Coordinator {

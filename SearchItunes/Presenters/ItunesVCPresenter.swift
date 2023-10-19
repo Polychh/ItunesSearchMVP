@@ -16,7 +16,7 @@ protocol ItunesViewProtocol: AnyObject{
 }
 
 protocol ItunesViewPresenterProtocol: AnyObject {
-    init(networkService: Manager, view: ItunesViewProtocol?, delegate: ItunesSearchPresenterDeleegate)
+    init(networkService: Manager, view: ItunesViewProtocol?, delegate: ItunesSearchPresenterDeleegate?)
     func getSongs(songName:String)
     func cleanTableView()
     func setDismissLoadingView()
@@ -31,9 +31,9 @@ class ItunesVCPresenter: ItunesViewPresenterProtocol {
     weak var viewItunes: ItunesViewProtocol?
     var songs: [Items]?
     var dataImage: [Data] = []
-    var delegate: ItunesSearchPresenterDeleegate
+    weak var delegate: ItunesSearchPresenterDeleegate?
         
-    required init(networkService: Manager, view: ItunesViewProtocol?, delegate: ItunesSearchPresenterDeleegate  ) {
+    required init(networkService: Manager, view: ItunesViewProtocol?, delegate: ItunesSearchPresenterDeleegate?) {
         self.networService = networkService
         self.viewItunes = view
         self.delegate = delegate
@@ -88,7 +88,7 @@ class ItunesVCPresenter: ItunesViewPresenterProtocol {
     }
     
     func tapOnTheSong(infoSong: Items?) {
-        delegate.didSelectSong(infoSong: infoSong)
+        delegate?.didSelectSong(infoSong: infoSong)
     }
 }
 

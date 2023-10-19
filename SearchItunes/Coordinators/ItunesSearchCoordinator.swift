@@ -17,20 +17,20 @@ protocol Coordinator: AnyObject { //для всех координаторов �
 }
 
 protocol ItunesSearchCoordinatorProtocol: Coordinator {
-    var viewFactoryBuilder: BuilderProtocol? {get set}
+    var viewBuilder: BuilderProtocol? {get set}
 }
 
 protocol ItunesSearchPresenterDeleegate: AnyObject{
     func didSelectSong(infoSong: Items?)
 }
 
-class ItunesSearchCoordinator: Coordinator {  // роутинг будет происходить из презентера в презентер
+class ItunesSearchCoordinator: ItunesSearchCoordinatorProtocol {  // роутинг будет происходить из презентера в презентер
     var navigationController: UINavigationController?
-    var viewFactoryBuilder: BuilderProtocol?
+    var viewBuilder: BuilderProtocol?
     
-    init(navigationController: UINavigationController?, viewFactoryBuilder: BuilderProtocol){
+    init(navigationController: UINavigationController?, viewBuilder: BuilderProtocol){
         self.navigationController = navigationController
-        self.viewFactoryBuilder = viewFactoryBuilder
+        self.viewBuilder = viewBuilder
     }
     
     func start() {
@@ -38,12 +38,12 @@ class ItunesSearchCoordinator: Coordinator {  // роутинг будет пр�
     }
     
     private func showItunesModule(){
-        guard let controller = viewFactoryBuilder?.createItunesView(delegate: self) else { return }
+        guard let controller = viewBuilder?.createItunesView(delegate: self) else { return }
         navigationController?.pushViewController(controller, animated: true)
     }
     
     private func showDetailSongsModule(infoSong: Items?){
-        guard let controller = viewFactoryBuilder?.createDetailSongsView(infoSong: infoSong) else { return }
+        guard let controller = viewBuilder?.createDetailSongsView(infoSong: infoSong) else { return }
         navigationController?.pushViewController(controller, animated: true)
     }
 }

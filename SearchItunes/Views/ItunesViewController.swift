@@ -99,8 +99,6 @@ extension ItunesViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let infoSong = presenterItunes.songs?[indexPath.row]
         presenterItunes.tapOnTheSong(infoSong: infoSong)
-//        let detailVC = ViewBuilder.createDetailSongsView(infoSong: infoSong)
-//        navigationController?.pushViewController(detailVC, animated: true)
     }
 }
 //MARK: - Update TableView
@@ -125,6 +123,7 @@ extension ItunesViewController: ItunesViewProtocol{
     
     
     func failure(error: ItunesError) {
+        presenterItunes.setDismissLoadingView()
         presentItunesAleretOnMainThread(title: "Error", message: error.rawValue, buttonTitle: "Ok")
     }
     func emptyErray() {

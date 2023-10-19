@@ -9,7 +9,7 @@ import UIKit
 
 class AppCoordinator: Coordinator {
     var navigationController: UINavigationController?
-    private var childCoordinator: Coordinator?
+    var childCoordinator: Coordinator?
     
     init(navigationController: UINavigationController) {
         self.navigationController =  navigationController
@@ -20,7 +20,7 @@ class AppCoordinator: Coordinator {
     }
     
     private func showItunesSearchFlow(){
-        let itunesSearchCoordinator = CoordinatorFactory().createItunnesSearchCoordinator(navigationController: navigationController, viewFactoryBuilder: ViewControlerBuilder())
+        let itunesSearchCoordinator = CoordinatorFactory().createItunnesSearchCoordinator(navigationController: navigationController, viewBuilder: ViewControlerBuilder())
         childCoordinator = itunesSearchCoordinator
         itunesSearchCoordinator.start()
     }
