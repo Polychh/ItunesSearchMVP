@@ -9,12 +9,13 @@ import Foundation
 
 protocol Manager{
     func getSongsInfo( for nameSong: String, completed: @escaping (Result<[Items], ItunesError>) -> Void)
-    func downloadImage(from urlString: String, completed: @escaping(Data) -> Void)
+    func downloadImage(from urlString: String, completed: @escaping(Result<Data, ItunesError>) -> Void)
 }
 
-class NetworkManager: Manager{
+final class NetworkManager: Manager{
     
     private let baseURL = "https://itunes.apple.com/search?term="
+    private let decoder = JSONDecoder()
     
     func getSongsInfo( for nameSong: String, completed: @escaping (Result<[Items], ItunesError>) -> Void){ //result type
         let endpoint = baseURL+"\(nameSong)&entity=song&attribute=songTerm"
@@ -41,11 +42,8 @@ class NetworkManager: Manager{
             }
             
             do { // parsing json
-                let decoder = JSONDecoder()
-                let decodeData = try decoder.decode(ItunesSongs.self, from: data)
-                
+                let decodeData = try self.decoder.decode(ItunesSongs.self, from: data)
                 completed(.success(decodeData.results))
-                print(decodeData.results)
             }catch{
                 completed(.failure(.invalidData))
             }
@@ -54,26 +52,28 @@ class NetworkManager: Manager{
         task.resume()
     }
     
-    func downloadImage(from urlString: String, completed: @escaping(Data) -> Void){
+    func downloadImage(from urlString: String, completed: @escaping(Result<Data, ItunesError>) -> Void) {
         guard let url = URL(string: urlString) else {
-            print("Error download")
+            completed(.failure(.invalidImageURL))
             return
         }
         
         let task = URLSession.shared.dataTask(with: url) {  (data, response, error) in
-            if let _ = error{
-                return
+            if let _ = error {
+                completed(.failure(.unableToComplete))
             }
             
             guard let response = response as? HTTPURLResponse, response.statusCode == 200 else{
-                print("Error reaponse")
+                completed(.failure(.invalidResponse))
                 return
             }
+                       
+            print("Thread imagedownload: \(Thread.current)")
             guard let data = data else{
-                print("error data")
+                completed(.failure(.invalidDataFromServer))
                 return
             }
-            completed(data)
+            completed(.success(data))
            
         }
         task.resume()

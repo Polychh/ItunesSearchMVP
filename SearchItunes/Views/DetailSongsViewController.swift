@@ -7,73 +7,23 @@
 
 import UIKit
 
-class DetailSongsViewController: UIViewController {
+final class DetailSongsViewController: UIViewController {
     
-    var detailItunesImageView: UIImageView = {
-        let image = UIImageView()
-        image.layer.cornerRadius = 2
-        image.clipsToBounds = true
-        image.translatesAutoresizingMaskIntoConstraints = false
-        return image
-    }()
-    
-    let detailTrackNameLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .systemGray5
-        label.adjustsFontSizeToFitWidth = true
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .center
-        label.font = UIFont.preferredFont(forTextStyle: .body)
-        label.minimumScaleFactor = 0.75
-        return label
-    }()
-    
-    let detailArtistNameLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .systemGray5
-        label.adjustsFontSizeToFitWidth = true
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .center
-        label.font = UIFont.preferredFont(forTextStyle: .body)
-        label.minimumScaleFactor = 0.75
-        return label
-    }()
-    
-    lazy var stackViewV: UIStackView = {
-        let stack = UIStackView()
-        stack.backgroundColor = #colorLiteral(red: 0.1019607857, green: 0.2784313858, blue: 0.400000006, alpha: 1)
-        stack.axis = .vertical
-        stack.spacing = 5.0
-        stack.alignment = .fill
-        stack.distribution = .fillEqually
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        stack.addArrangedSubview(detailArtistNameLabel)
-        stack.addArrangedSubview(detailTrackNameLabel)
-        return stack
-    }()
-    
-    let detailButtonPlay: UIButton = {
-        let button = UIButton()
-        button.layer.cornerRadius = 3
-        button.setTitle("Play", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = #colorLiteral(red: 0.6403500438, green: 0.8327332139, blue: 0.8568341136, alpha: 1)
-        button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .headline)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    
-    let activityIndicatorDetail = ItunesActivityIndicator(frame: .zero)
+    private let detailItunesImageView = SearchItunesUIImage(frame: .zero)
+    private let detailTrackNameLabel = SearchItunesUILabel(textAlignment: .center, fontSize: 17, textColor: .systemGray5)
+    private let detailArtistNameLabel = SearchItunesUILabel(textAlignment: .center, fontSize: 17, textColor: .systemGray5)
+    private let detailButtonPlay = SarchItunesUIButton(backgroundColor: #colorLiteral(red: 0.6403500438, green: 0.8327332139, blue: 0.8568341136, alpha: 1), title: "Play")
+    private let activityIndicatorDetail = ItunesActivityIndicator(frame: .zero)
+    private let stackViewV = UIStackView()
     
     var presenterDetails: DatailSongVCPresenterProtocol!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = #colorLiteral(red: 0.1083840653, green: 0.2951095104, blue: 0.324511826, alpha: 1)
         setConstrains()
+        setScrollView()
         addTarget()
         presenterDetails.setInfoSongs()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -81,17 +31,29 @@ class DetailSongsViewController: UIViewController {
         navigationController?.setNavigationBarHidden(false, animated: true)
     }
     
-    func addTarget(){
+    private func setScrollView(){
+        stackViewV.backgroundColor = #colorLiteral(red: 0.1019607857, green: 0.2784313858, blue: 0.400000006, alpha: 1)
+        stackViewV.axis = .vertical
+        stackViewV.spacing = 5.0
+        stackViewV.alignment = .fill
+        stackViewV.distribution = .fillEqually
+        stackViewV.translatesAutoresizingMaskIntoConstraints = false
+        stackViewV.addArrangedSubview(detailArtistNameLabel)
+        stackViewV.addArrangedSubview(detailTrackNameLabel)
+    }
+    
+    private func addTarget(){
         detailButtonPlay.addTarget(self, action: #selector(detailButtonPlayTapped), for: .touchUpInside)
     }
     
-    @objc func detailButtonPlayTapped(){
+    @objc private func detailButtonPlayTapped(){
         presenterDetails?.pressedPlayButton()
     }
 }
 //MARK: - Layout
 extension DetailSongsViewController{
-    func setConstrains(){
+    private func setConstrains(){
+        view.backgroundColor = #colorLiteral(red: 0.1083840653, green: 0.2951095104, blue: 0.324511826, alpha: 1)
         view.addSubview(detailItunesImageView)
         view.addSubview(stackViewV)
         view.addSubview(detailButtonPlay)
@@ -114,7 +76,6 @@ extension DetailSongsViewController{
             detailButtonPlay.topAnchor.constraint(equalTo: stackViewV.bottomAnchor, constant: 20),
             detailButtonPlay.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -50),
             detailButtonPlay.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50),
-            
             detailButtonPlay.heightAnchor.constraint(equalToConstant: 50),
         ])
     }
@@ -125,7 +86,15 @@ extension DetailSongsViewController: DetailSongsViewProtocol{
     func startSetInfoSongs(infoSongs: Items?) {
         detailTrackNameLabel.text = infoSongs?.trackCensoredName
         detailArtistNameLabel.text = infoSongs?.artistName
-        presenterDetails.downloadImageDetailVC(urlImage: infoSongs?.artworkUrl60 ?? Constant.defaultURL, urlSong: infoSongs!.previewUrl)
+        if let previewUrl = infoSongs?.previewUrl{
+            guard let urlImage = infoSongs?.artworkUrl60 else{
+                detailItunesImageView.image = UIImage(named: Constant.defaultImage)
+                return
+            }
+            presenterDetails.downloadImageDetailVC(urlImage: urlImage, urlSong: previewUrl)
+        } else{
+            presentItunesAleretOnMainThread(title: "Error download", message: "Can not download song, please, try another songs", buttonTitle: "Ok")
+        }
     }
     
     func successDownload() {

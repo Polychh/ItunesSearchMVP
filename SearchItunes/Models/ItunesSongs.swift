@@ -8,13 +8,14 @@
 
 import Foundation
 
-struct ItunesSongs: Codable {
+struct ItunesSongs: Decodable {
     let results: [Items]
 }
 
-struct Items: Codable{
-    let artistName: String?
-    let trackCensoredName: String?
+struct Items: Decodable{
+    let artistName: String
+    let trackCensoredName: String
     let artworkUrl60: String?
-    let previewUrl: String
+    let previewUrl: String?
+    let trackId: Int
 }

@@ -7,17 +7,16 @@
 
 import UIKit
 
-class ItunesViewController: UIViewController {
+final class ItunesViewController: UIViewController {
     var presenterItunes: ItunesViewPresenterProtocol!
     
-    let searchTextField = SearchTextField()
-    let tableView = UITableView()
-    let activityIndicator = ItunesActivityIndicator(frame: .zero)
-
+    private let searchTextField = SearchTextField()
+    private let tableView = UITableView()
+    private let activityIndicator = ItunesActivityIndicator(frame: .zero)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = #colorLiteral(red: 0.4310129881, green: 0.6814386249, blue: 0.7116398215, alpha: 1)
-        searchTextField.delegate = self
+        setDelegates()
         setConstrains()
         configureTableView()
     }
@@ -28,18 +27,24 @@ class ItunesViewController: UIViewController {
         navigationController?.setNavigationBarHidden(true, animated: true) //hide navigationbar
         
     }
+    private func setDelegates(){
+        searchTextField.delegate = self
+    }
     
-    func configureTableView(){
+    private func configureTableView() {
         tableView.rowHeight = 60
+        tableView.backgroundColor = #colorLiteral(red: 0.8039215686, green: 0.9607843137, blue: 0.9921568627, alpha: 1)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(TableSongsCell.self, forCellReuseIdentifier: TableSongsCell.resuseID)
     }
 }
 //MARK: - Layout
 extension ItunesViewController{
-    func setConstrains(){
+    private func setConstrains(){
+        view.backgroundColor = #colorLiteral(red: 0.4310129881, green: 0.6814386249, blue: 0.7116398215, alpha: 1)
+        
         view.addSubview(searchTextField)
         view.addSubview(tableView)
         activityIndicator.center = view.center
@@ -73,31 +78,38 @@ extension ItunesViewController: UITextFieldDelegate{
             return true
         } else {
             presenterItunes.setDismissLoadingView()
+            presenterItunes.cleanTableView()
+            presenterItunes.reloadTableView()
             presentItunesAleretOnMainThread(title: "Type something", message: "Your textfield is empty or you typing less than 3 characters, please, type more!", buttonTitle: "OK")
             return false
         }
     }
 }
-
+//MARK: - UITableViewDelegate, UITableViewDataSource
 extension ItunesViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return presenterItunes.songs?.count ?? 0
+        return presenterItunes.songs.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TableSongsCell.resuseID, for: indexPath) as? TableSongsCell else {
             return UITableViewCell()
         }
-
-        let songInfo = presenterItunes.songs?[indexPath.row]
-        cell.artistNameLabel.text = songInfo?.artistName
-        cell.trackNameLabel.text = songInfo?.trackCensoredName
-        cell.itunesImageView.image = UIImage(data: presenterItunes.dataImage[indexPath.row])
+        
+        let songInfo = presenterItunes.songs[indexPath.row]
+        cell.congigureArtistName(artistName: songInfo.artistName)
+        cell.congigureTrackName(trackName: songInfo.trackCensoredName)
+        let imageInfo = presenterItunes.songs[indexPath.row].trackId
+        if let imageData = presenterItunes.dataImage[imageInfo]{
+            cell.congigureAlbumView(albumView: UIImage(data: imageData))
+        }else{
+            cell.congigureAlbumView(albumView: UIImage(named: Constant.defaultImage))
+        }
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let infoSong = presenterItunes.songs?[indexPath.row]
+        let infoSong = presenterItunes.songs[indexPath.row]
         presenterItunes.tapOnTheSong(infoSong: infoSong)
     }
 }
@@ -115,18 +127,22 @@ extension ItunesViewController: ItunesViewProtocol{
         }
     }
     
-    func success() {
+    func reloadTableView() {
         DispatchQueue.main.async() {
             self.tableView.reloadData()
         }
     }
     
-    
     func failure(error: ItunesError) {
         presenterItunes.setDismissLoadingView()
         presentItunesAleretOnMainThread(title: "Error", message: error.rawValue, buttonTitle: "Ok")
+        searchTextField.text = ""
     }
-    func emptyErray() {
+    
+    func emptyArray() {
         presentItunesAleretOnMainThread(title: "Incorrect song name", message: "Nothing found, Please, try again", buttonTitle: "Ok")
+        DispatchQueue.main.async() {
+            self.searchTextField.text = ""
+        }
     }
 }

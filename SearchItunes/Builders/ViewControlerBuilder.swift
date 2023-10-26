@@ -7,37 +7,14 @@
 
 
 import UIKit
-//protocol ItunesViewFactory {
-//    func makeItunesPresenter() -> ItunesViewPresenterProtocol
-//    func makeDetailSongViewController() -> UIViewController
-//}
-//
-//
-//class AssamblyItunesViewFactory: ItunesViewFactory{
-//    func makeItunesPresenter() -> ItunesViewPresenterProtocol {
-//        let networkService = makeNetworkService()
-//        return ItunesVCPresenter(networkService: networkService)
-//    }
-//
-//    func makeDetailSongViewController() -> UIViewController {
-//        let itunesViewController = ItunesViewController()
-//        // нужно будет добавить presenter.viewItunes = view
-//        //itunesViewController.presenterItunes = makeItunesPresenter()
-//        return itunesViewController
-//    }
-//
-//    private func makeNetworkService() -> Manager {
-//        return NetworkManager()
-//    }
-//}
 
 protocol BuilderProtocol{
-    func createItunesView(delegate: ItunesSearchPresenterDeleegate) -> UIViewController
+    func createItunesView(delegate: ItunesSearchPresenterDelegate) -> UIViewController
     func createDetailSongsView(infoSong: Items?) -> UIViewController
 }
 
-class ViewControlerBuilder: BuilderProtocol {
-    func createItunesView(delegate: ItunesSearchPresenterDeleegate ) -> UIViewController {
+final class ViewControlerBuilder: BuilderProtocol {
+    func createItunesView(delegate: ItunesSearchPresenterDelegate ) -> UIViewController {
         let view = ItunesViewController()
         let networkService = NetworkManager()
         let presenter = ItunesVCPresenter(networkService: networkService, view: view, delegate: delegate)

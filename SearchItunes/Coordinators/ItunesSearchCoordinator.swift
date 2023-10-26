@@ -10,23 +10,23 @@ import UIKit
 //typealias CoordinatorHandler = () -> ()
 
 protocol Coordinator: AnyObject { //для всех координаторов базовый протокол
-    var navigationController: UINavigationController? {get set}
+    var navigationController: UINavigationController? {get}
     //var flowComplitionHandler: CoordinatorHandler? // если несколько flow, для обработки завершениия flow
     func start() // начинается flow
     
 }
 
 protocol ItunesSearchCoordinatorProtocol: Coordinator {
-    var viewBuilder: BuilderProtocol? {get set}
+    var viewBuilder: BuilderProtocol? {get}
 }
 
-protocol ItunesSearchPresenterDeleegate: AnyObject{
+protocol ItunesSearchPresenterDelegate: AnyObject{
     func didSelectSong(infoSong: Items?)
 }
 
-class ItunesSearchCoordinator: ItunesSearchCoordinatorProtocol {  // роутинг будет происходить из презентера в презентер
-    var navigationController: UINavigationController?
-    var viewBuilder: BuilderProtocol?
+final class ItunesSearchCoordinator: ItunesSearchCoordinatorProtocol {  // роутинг будет происходить из презентера в презентер
+    let navigationController: UINavigationController?
+    let viewBuilder: BuilderProtocol?
     
     init(navigationController: UINavigationController?, viewBuilder: BuilderProtocol){
         self.navigationController = navigationController
@@ -48,7 +48,7 @@ class ItunesSearchCoordinator: ItunesSearchCoordinatorProtocol {  // роути�
     }
 }
 
-extension ItunesSearchCoordinator: ItunesSearchPresenterDeleegate{
+extension ItunesSearchCoordinator: ItunesSearchPresenterDelegate{
     func didSelectSong(infoSong: Items?) {
         showDetailSongsModule(infoSong: infoSong)
     }

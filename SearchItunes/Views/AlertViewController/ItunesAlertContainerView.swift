@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ItunesAlertContainerView: UIView {
+final class ItunesAlertContainerView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)

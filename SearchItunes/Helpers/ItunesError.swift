@@ -13,4 +13,5 @@ enum ItunesError: String, Error{
     case invalidResponse = "Invalid response from the server. Please try again"
     case invalidData = "The data received from the server was invalid. Please try again"
     case invalidDataFromServer = " The The data received from the server was invalid. Please try again"
+    case invalidImageURL = "Can not convert String for Image"
 }

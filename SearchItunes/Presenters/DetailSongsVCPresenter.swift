@@ -24,13 +24,13 @@ protocol DatailSongVCPresenterProtocol: AnyObject{
     var dataFromURLMusic: Data {get set}
 }
 
-class DatailSongsVCPresenter: DatailSongVCPresenterProtocol{
+final class DatailSongsVCPresenter: DatailSongVCPresenterProtocol{
 
-    var player: AVAudioPlayer?
-    var plaing: Bool = true
+    private var player: AVAudioPlayer?
+    private var plaing: Bool = true
     
     weak var detailView: DetailSongsViewProtocol?
-    var networkService: Manager
+    let networkService: Manager
     var infoSong: Items?
     var dataFromURLImage: Data = Data()
     var dataFromURLMusic: Data = Data()
@@ -47,24 +47,33 @@ class DatailSongsVCPresenter: DatailSongVCPresenterProtocol{
     
     func downloadImageDetailVC(urlImage: String, urlSong: String) {
         let group = DispatchGroup()
-        networkService.downloadImage(from: urlImage) { (data) in
+        networkService.downloadImage(from: urlImage) { (result) in
             self.detailView?.startLoadinView()
-            print("Thread5 \(Thread.current)")
-            self.dataFromURLImage = data
-            self.detailView?.successDownload()
             group.enter()
-            self.networkService.downloadImage(from: urlSong) { (data) in
-                print("Thread6 \(Thread.current)")
-                //sleep(4) // to see how work dispatch group
-                self.dataFromURLMusic = data
-                group.leave()
-            }
-            group.notify(queue: .main){
-                print("Thread7 \(Thread.current)")
-                self.detailView?.dissmisLoadingView()
-                DispatchQueue.main.async {
-                    self.player = try? AVAudioPlayer(data: self.dataFromURLMusic)
+            switch result{
+            case .success(let data):
+                self.dataFromURLImage = data
+                self.detailView?.successDownload()
+                self.networkService.downloadImage(from: urlSong) { (result) in
+                    switch result{
+                    case .success(let data):
+                        print("Thread6 \(Thread.current)")
+                        //sleep(4) // to see how work dispatch group
+                        self.dataFromURLMusic = data
+                        group.leave()
+                    case .failure(let error):
+                        print(error)
+                    }
                 }
+                group.notify(queue: .main){
+                    print("Thread7 \(Thread.current)")
+                    self.detailView?.dissmisLoadingView()
+                    DispatchQueue.main.async {
+                        self.player = try? AVAudioPlayer(data: self.dataFromURLMusic)
+                    }
+                }
+            case .failure(let error):
+                print(error)
             }
         }
     }

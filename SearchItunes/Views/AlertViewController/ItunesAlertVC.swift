@@ -7,48 +7,17 @@
 
 import UIKit
 
-class ItunesAlertVC: UIViewController {
+final class ItunesAlertVC: UIViewController {
     
-    let containerView = ItunesAlertContainerView()
+    private let containerView = ItunesAlertContainerView()
+    private let titleLabel = SearchItunesUILabel(textAlignment: .center, fontSize: 20, textColor: .label)
+    private let messageLabel = SearchItunesUILabel(textAlignment: .center, fontSize: 20, textColor: .secondaryLabel)
+    private let actionButton = SarchItunesUIButton(backgroundColor: .systemPink, title: "OK")
+    private var alertTitle: String?
+    private var message: String?
+    private var buttonTitle: String?
     
-    let titleLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .label
-        label.adjustsFontSizeToFitWidth = true
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
-        label.minimumScaleFactor = 0.9
-        return label
-    }()
-    
-    let messageLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .secondaryLabel
-        label.adjustsFontSizeToFitWidth = true
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .center
-        label.font = UIFont.preferredFont(forTextStyle: .body)
-        label.minimumScaleFactor = 0.75
-        return label
-    }()
-    
-    let actionButton: UIButton = {
-        let button = UIButton()
-        button.backgroundColor = .systemPink
-        button.setTitle("OK", for: .normal)
-        button.layer.cornerRadius   = 10
-        button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .headline)
-        button.setTitleColor(.white, for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    
-    var alertTitle: String?
-    var message: String?
-    var buttonTitle: String?
-    
-    let padding: CGFloat = 20
+    private let padding: CGFloat = 20
     
     init(title: String, message: String, buttonTitle: String){
         super.init(nibName: nil, bundle: nil)
@@ -75,7 +44,7 @@ class ItunesAlertVC: UIViewController {
         configureMessageLabel()
     }
     
-    func configureContainerView() {
+     private func configureContainerView() {
         NSLayoutConstraint.activate([
             containerView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             containerView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -84,7 +53,7 @@ class ItunesAlertVC: UIViewController {
         ])
     }
     
-    func configureTitleLabel(){
+    private func configureTitleLabel(){
         titleLabel.text = alertTitle ?? "Somthing went wrong"
  
         NSLayoutConstraint.activate([
@@ -95,7 +64,7 @@ class ItunesAlertVC: UIViewController {
         ])
     }
     
-    func configureActionButton(){
+    private func configureActionButton(){
         actionButton.setTitle(buttonTitle ?? "Ok", for: .normal)
         actionButton.addTarget(self, action: #selector(dismissVC), for: .touchUpInside)
         
@@ -107,7 +76,7 @@ class ItunesAlertVC: UIViewController {
         ])
     }
     
-    func configureMessageLabel(){
+    private func configureMessageLabel(){
         messageLabel.text = message ?? "Unable to complete request"
         messageLabel.numberOfLines = 4
         
@@ -119,7 +88,7 @@ class ItunesAlertVC: UIViewController {
         ])
     }
     
-    @objc func dismissVC(){
+    @objc private func dismissVC(){
         dismiss(animated: true)
     }
 }

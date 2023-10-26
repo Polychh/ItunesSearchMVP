@@ -8,32 +8,33 @@
 import Foundation
 
 protocol ItunesViewProtocol: AnyObject{
-    func success()
+    func reloadTableView()
     func failure(error: ItunesError)
-    func emptyErray()
+    func emptyArray()
     func dissmisLoadingView()
     func startLoadinView()
 }
 
 protocol ItunesViewPresenterProtocol: AnyObject {
-    init(networkService: Manager, view: ItunesViewProtocol?, delegate: ItunesSearchPresenterDeleegate?)
+    init(networkService: Manager, view: ItunesViewProtocol?, delegate: ItunesSearchPresenterDelegate?)
     func getSongs(songName:String)
     func cleanTableView()
     func setDismissLoadingView()
+    func reloadTableView()
     func tapOnTheSong(infoSong: Items?)
-    var songs: [Items]? {get set}
-    var dataImage: [Data] {get set}
+    var songs: [Items] {get set}
+    var dataImage: [Int:Data] {get set}
 }
 
-class ItunesVCPresenter: ItunesViewPresenterProtocol {
+final class ItunesVCPresenter: ItunesViewPresenterProtocol {
     
-    var networService: Manager
+    let networService: Manager
     weak var viewItunes: ItunesViewProtocol?
-    var songs: [Items]?
-    var dataImage: [Data] = []
-    weak var delegate: ItunesSearchPresenterDeleegate?
+    var songs: [Items] = []
+    var dataImage: [Int:Data] = [:]
+    weak var delegate: ItunesSearchPresenterDelegate?
         
-    required init(networkService: Manager, view: ItunesViewProtocol?, delegate: ItunesSearchPresenterDeleegate?) {
+    required init(networkService: Manager, view: ItunesViewProtocol?, delegate: ItunesSearchPresenterDelegate?) {
         self.networService = networkService
         self.viewItunes = view
         self.delegate = delegate
@@ -43,41 +44,43 @@ class ItunesVCPresenter: ItunesViewPresenterProtocol {
         let group = DispatchGroup()
         networService.getSongsInfo(for: songName) { [weak self] results in
             guard let self = self else { return }
-            self.dataImage = [] // clean array every new request
+            self.dataImage = [:]// clean diictionary every new request
             self.viewItunes?.startLoadinView()
             print("Thread1 \(Thread.current)")
             switch results{
             case .success(let songsArray):
-                //print("Count\(songsArray.count)")
+                print(songsArray)
+                print("Thread1 \(Thread.current)")
                 self.songs = songsArray
                 if songsArray.isEmpty{
                     self.viewItunes?.dissmisLoadingView()
-                    self.viewItunes?.emptyErray()
+                    self.viewItunes?.emptyArray()
+                    self.viewItunes?.reloadTableView()
                 } else{
-                    if let songs = self.songs{
-                        for song in songs{
+                    for song in self.songs{
                             group.enter()
-                            self.networService.downloadImage(from: song.artworkUrl60 ?? Constant.defaultURL) { (data) in
-                                //sleep(1) // to see how work dispatch group
-                                print("Thread3 \(Thread.current)")
-                                self.dataImage.append(data)
+                        self.networService.downloadImage(from: song.artworkUrl60 ?? Constant.defaultURL) { (result) in
+                            switch result{
+                            case.success(let data):
+                                print("Thread2 \(Thread.current)")
+                                self.dataImage[song.trackId] = data
                                 group.leave()
+                            case .failure(let error):
+                                self.viewItunes?.failure(error: error)
                             }
                         }
                         group.notify(queue: .main){
-                            print("Thread4 \(Thread.current)")
                             self.viewItunes?.dissmisLoadingView()
-                            self.viewItunes?.success()
+                            self.viewItunes?.reloadTableView()
                         }
                     }
                 }
             case .failure(let error):
-                print(error)
                 self.viewItunes?.failure(error: error)
+                self.viewItunes?.reloadTableView()
             }
         }
     }
-    
     
     func setDismissLoadingView() {
         viewItunes?.dissmisLoadingView()
@@ -89,6 +92,10 @@ class ItunesVCPresenter: ItunesViewPresenterProtocol {
     
     func tapOnTheSong(infoSong: Items?) {
         delegate?.didSelectSong(infoSong: infoSong)
+    }
+    
+    func reloadTableView(){
+        viewItunes?.reloadTableView()
     }
 }
 

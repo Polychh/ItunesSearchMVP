@@ -12,7 +12,7 @@ protocol CoordinatorBuilderProtocol{
     func createAppCoordinator(navigationController: UINavigationController) -> Coordinator
 }
 
-class CoordinatorFactory: CoordinatorBuilderProtocol {
+final class CoordinatorFactory: CoordinatorBuilderProtocol {
     func createItunnesSearchCoordinator(navigationController: UINavigationController?, viewBuilder: BuilderProtocol) -> Coordinator {
         ItunesSearchCoordinator(navigationController: navigationController, viewBuilder: viewBuilder)
     }

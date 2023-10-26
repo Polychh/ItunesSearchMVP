@@ -7,8 +7,8 @@
 
 import UIKit
 
-class AppCoordinator: Coordinator {
-    var navigationController: UINavigationController?
+final class AppCoordinator: Coordinator {
+    let navigationController: UINavigationController?
     var childCoordinator: Coordinator?
     
     init(navigationController: UINavigationController) {

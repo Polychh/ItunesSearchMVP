@@ -7,40 +7,14 @@
 
 import UIKit
 
-class TableSongsCell: UITableViewCell {
+final class TableSongsCell: UITableViewCell {
     static let resuseID = "TableSongsCell"
     
-    let artistNameLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .secondaryLabel
-        label.adjustsFontSizeToFitWidth = true
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .center
-        label.font = UIFont.preferredFont(forTextStyle: .body)
-        label.minimumScaleFactor = 0.75
-        return label
-    }()
+    private let artistNameLabel = SearchItunesUILabel(textAlignment: .center, fontSize: 15, textColor: .secondaryLabel)
+    private let trackNameLabel = SearchItunesUILabel(textAlignment: .center, fontSize: 15, textColor: .secondaryLabel)
+    private let itunesImageView = SearchItunesUIImage(frame: .zero)
     
-    let trackNameLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .secondaryLabel
-        label.adjustsFontSizeToFitWidth = true
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .center
-        label.font = UIFont.preferredFont(forTextStyle: .body)
-        label.minimumScaleFactor = 0.75
-        return label
-    }()
-    
-    var itunesImageView: UIImageView = {
-        let image = UIImageView()
-        image.layer.cornerRadius = 10
-        image.clipsToBounds = true
-        image.translatesAutoresizingMaskIntoConstraints = false
-        return image
-    }()
-    
-    lazy var stackViewH: UIStackView = {
+    lazy private var stackViewH: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
         stack.spacing = 5.0
@@ -61,11 +35,8 @@ class TableSongsCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
-    
     private func configure(){
+        self.backgroundColor = #colorLiteral(red: 0.8039215686, green: 0.9607843137, blue: 0.9921568627, alpha: 1)
         addSubview(itunesImageView)
         addSubview(stackViewH)
                   
@@ -82,5 +53,16 @@ class TableSongsCell: UITableViewCell {
             stackViewH.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -padding),
             stackViewH.heightAnchor.constraint(equalToConstant: 40),
         ])
+    }
+    func congigureArtistName(artistName: String){
+        artistNameLabel.text = artistName
+    }
+    
+    func congigureTrackName(trackName: String){
+        trackNameLabel.text = trackName
+    }
+    
+    func congigureAlbumView(albumView: UIImage?){
+        itunesImageView.image = albumView
     }
 }
